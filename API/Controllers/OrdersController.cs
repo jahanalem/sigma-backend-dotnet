@@ -40,7 +40,7 @@ namespace API.Controllers
         public async Task<ActionResult<IReadOnlyList<OrderDto>>> GetOrdersForUser()
         {
             var email = User.RetrieveEmailFromPrincipal();
-
+            
             var orders = await _orderService.GetOrdersForUserAsync(email);
 
             return Ok(_mapper.Map<IReadOnlyList<OrderToReturnDto>>(orders));

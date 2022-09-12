@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Core.Entities;
 using Core.Specifications;
@@ -7,7 +8,8 @@ namespace Infrastructure.Data
 {
     public class SpecificationEvaluator<TEntity> where TEntity : BaseEntity
     {
-        public static IQueryable<TEntity> GetQuery(IQueryable<TEntity> inputQuery, ISpecification<TEntity> spec)
+        public static IQueryable<TEntity> GetQuery(IQueryable<TEntity> inputQuery, 
+                                                    ISpecification<TEntity> spec)
         {
             var query = inputQuery;
 
@@ -31,6 +33,11 @@ namespace Infrastructure.Data
                 query = query.Skip(spec.Skip).Take(spec.Take);
             }
 
+            // spec     : ISpecification<TEntity> 
+            // Includes :List<Expression<Func<T, object>>> 
+            // query    : IQueryable<TEntity> 
+            // current  : IQueryable<TEntity> 
+            // include  : Expression<Func<TEntity, object>>
             query = spec.Includes.Aggregate(query, (current, include) => current.Include(include));
 
             return query;
